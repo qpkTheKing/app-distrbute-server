@@ -1,4 +1,4 @@
 module.exports = {
-  database: "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass%20Community&ssl=false",
+  database: "mongodb+srv://malik:1d280478@cluster0.os19i.gcp.mongodb.net/test?retryWrites=true&w=majority",
   secret: "WinterIsComingGOT2019"
 };

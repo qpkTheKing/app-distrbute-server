@@ -23,6 +23,10 @@ const fileSchema = mongoose.Schema({
     type: String,
     required: true
   },
+  forDownload: {
+    type: String,
+    required: true
+  },
   created: {
     type: Date,
     default: Date.now()

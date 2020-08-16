@@ -1,10 +1,9 @@
-const fs = require('fs')
+const fs = require('fs');
 const path = require('path');
 const Axios = require('axios');
-const ProgressBar = require('progress')
+const ProgressBar = require('progress');
 
-const FILE_SERVER = 'http://127.0.0.1:1080/files';
-
+// 发送文件
 function sendFile(stream, totalSize, mimeType, socket) {
   if (mimeType != null && typeof mimeType !== 'string') {
     throw new Error('Invalid mimetype, expected string.')
@@ -38,35 +37,11 @@ function sendFile(stream, totalSize, mimeType, socket) {
   })
 }
 
-const transfer = async (fileHash, fileName, type) => {
-  const fileURL = `${FILE_SERVER}/${fileHash}`;
+// 选择指定的文件进行下载
+const makeFile = async (fileHash, fileName, email) => {
+  return new Promise((resolve, reject) => {
 
-  const { data, headers } = await Axios({
-    url: fileURL,
-    method: 'GET',
-    responseType: 'stream',
-    maxContentLength: 2 * 100 * 1024,
-    maxBodyLength: 2 * 100 * 1024,
   });
-
-  const totalLength = headers['content-length'];
-
-  const progressBar = new ProgressBar(`-> ${fileHash} downloading [:bar] :percent :etas`, {
-    width: 40,
-    complete: '=',
-    incomplete: ' ',
-    renderThrottle: 1,
-    total: parseInt(totalLength)
-  });
-
-  const writer = fs.createWriteStream(
-    path.resolve(process.cwd(), 'tmp', `${fileName}.${fileHash}.${type}`)
-  );
-
-  data.on('data', (chunk) => progressBar.tick(chunk.length));
-  data.pipe(writer);
-
-  return { stream: data, totalSize: totalLength };
 };
 
 const transferServerSide = socketIO => {
@@ -80,8 +55,8 @@ const transferServerSide = socketIO => {
   });
   socketIO.of('/files').on('connection', socket => {
     socket.on("APP-NEED-DELIVERY", async (file, fn) => {
-      const { fileHash, fileName, type } = file;
-      const { stream, totalSize } = await transfer(fileHash, fileName, type, socket);
+      const { fileHash, fileName, email } = file;
+      const { stream, totalSize } = await makeFile(fileHash, fileName, email);
       fn("APP-BEGIN-DELIVERY");
       await sendFile(stream, totalSize, "application/octet-stream", socket);
     });
