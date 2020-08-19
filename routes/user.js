@@ -142,6 +142,7 @@ router.put('/user/app', auth, async (req, resp) => {
       }
     });
   } catch (error) {
+    console.log(error);
     resp.status(400).send(error);
   }
 });
