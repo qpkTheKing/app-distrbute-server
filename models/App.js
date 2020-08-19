@@ -6,6 +6,10 @@ let appSchema = mongoose.Schema({
     required: true,
     trim: true
   },
+  owner: {
+    type: String,
+    required: false,
+  },
   appId: {
     type: String,
     required: true,
@@ -39,6 +43,10 @@ let appSchema = mongoose.Schema({
   files: [{
     type: mongoose.Schema.ObjectId,
     ref: "File",
+    require: false
+  }],
+  previewImages: [{
+    type: String,
     require: false
   }],
   created: {

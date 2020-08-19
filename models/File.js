@@ -27,6 +27,14 @@ const fileSchema = mongoose.Schema({
     type: String,
     required: true
   },
+  downloadTimes: {
+    type: String,
+    required: false
+  },
+  downloadUrl: {
+    type: String,
+    required: false
+  },
   created: {
     type: Date,
     default: Date.now()

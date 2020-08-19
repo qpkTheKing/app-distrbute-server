@@ -37,10 +37,12 @@ router.post('/user/login', async (req, res) => {
   }
 });
 
-// 获取当前用户个人信息
+// 查询个人信息
 router.get('/user/me', auth, async (req, res) => {
-  const {name, email} = req.user;
-  res.send({name, email});
+  const {email} = req.user;
+  const result = await User.find({email});
+  const {name, quota, created} = result[0];
+  res.send({code: 200, message: '', data: {name, email, quota, created}});
 });
 
 // 创建新的APP
@@ -50,7 +52,7 @@ router.post('/user/app', auth, async (req, resp) => {
     const user = req.user;
     const uuid = uuidv4().split('-').join('');
 
-    const newApp = new App({name, appId: uuid});
+    const newApp = new App({name, appId: uuid, owner: user.email});
     await newApp.save();
 
     await User.update({email: user.email}, {$addToSet: {apps: [newApp._id]}});
@@ -147,9 +149,17 @@ router.put('/user/app', auth, async (req, resp) => {
 // 客户端上传文件后添加对应的数据库条目
 router.post('/user/app/file', auth, async (req, resp) => {
   try {
-    const {hashId, size, fileName, type, appId} = req.body;
+    const {hashId, size, fileName, type, appId, forDownload, downloadUrl} = req.body;
 
-    const newFile = new File({hashId, appId, name: fileName, size, fType: type});
+    const newFile = new File({
+      hashId,
+      appId,
+      name: fileName,
+      size, fType: type,
+      forDownload,
+      downloadTimes: "0",
+      downloadUrl
+    });
     await newFile.save();
 
     await App.update({appId}, {$addToSet: {files: [newFile._id]}});
@@ -181,12 +191,39 @@ router.get('/user/app/files', auth, async (req, resp) => {
   }
 });
 
-// 获得可用流量
-router.get('/user/quota', auth, async (req, resp) => {
-  try {
-    const {email} = req.user;
+// 计算浏览次数
+router.get('/user/download', async (req, resp) => {
+  const {fileHash, downloadDate} = req.query;
+  const downloadSrv = 'https://localhost:1080/files';
 
-    const user = await User.find({email}).exec();
+  try {
+    const {downloadTimes, name, appId, size} = await File.findOne({hashId: fileHash});
+    const { name: appName, icon, version, owner } = await App.findOne({ appId });
+    const newTimes = parseInt(downloadTimes) + 1;
+    await File.update({hashId: fileHash}, {$set: {downloadTimes: newTimes.toString()}});
+    resp.send({
+      code: 200, message: '', data: {
+        download: `${downloadSrv}/${fileHash}`,
+        appName,
+        icon,
+        version,
+        email: owner,
+        fileName: name,
+        size,
+        appId
+      }
+    });
+  } catch (error) {
+    resp.status(400).send(error);
+  }
+});
+
+// 获得可用流量
+router.get('/user/quota', async (req, resp) => {
+  try {
+    const {email} = req.query;
+
+    const user = await User.findOne({email}).exec();
     const {quota} = user;
 
     resp.send({code: 200, message: '', data: quota});
@@ -196,15 +233,14 @@ router.get('/user/quota', auth, async (req, resp) => {
 });
 
 // 扣除流量
-router.post('/user/quota', auth, async (req, resp) => {
+router.post('/user/quota', async (req, resp) => {
   try {
-    const {usedQuota} = req.body;
-    const {email} = req.user;
+    const {usedQuota, email} = req.body;
 
-    const usedQuotaNumber = parseInt(usedQuota);
-    const user = await User.find({email}).exec();
+    const usedQuotaNumber = parseFloat(usedQuota);
+    const user = await User.findOne({email}).exec();
     const {quota} = user;
-    const leftQuota = quota - usedQuotaNumber;
+    const leftQuota = parseFloat(quota) - usedQuotaNumber;
 
     if (leftQuota <= 0) {
       resp.status(400).send('Quota is not enough for download.');

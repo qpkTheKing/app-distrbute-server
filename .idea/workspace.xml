@@ -2,15 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e4fb159b-64d7-46b6-8cae-1367c1e2ecaf" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/uploader/data/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/uploader/pkgs/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/uploader/tusd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/uploader/tusd-linux" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/uploader/tusd-macos" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/db.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/config/db.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/models/File.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/File.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/user.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/socket/transfer.js" beforeDir="false" afterPath="$PROJECT_DIR$/socket/transfer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploader/tusd" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,22 +69,50 @@
       <workItem from="1597303961378" duration="249000" />
       <workItem from="1597304222615" duration="10162000" />
       <workItem from="1597388746457" duration="1830000" />
-      <workItem from="1597471332696" duration="7914000" />
+      <workItem from="1597471332696" duration="12801000" />
+      <workItem from="1597652232333" duration="22398000" />
     </task>
+    <task id="LOCAL-00001" summary="提交部分修改">
+      <created>1597565085216</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1597565085216</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="提交部分修改" />
+    <option name="LAST_COMMIT_MESSAGE" value="提交部分修改" />
+  </component>
   <component name="WindowStateProjectService">
-    <state x="184" y="123" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1597556798224">
+    <state x="184" y="123" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1597647227271">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
-    <state x="184" y="123" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1597556798224" />
+    <state x="184" y="123" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1597647227271" />
     <state x="675" y="357" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1597134816955">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="675" y="357" key="#com.intellij.fileTypes.FileTypeChooser/0.0.2048.1112/2560.0.1920.1040@0.0.2048.1112" timestamp="1597134816955" />
+    <state x="297" y="23" key="CommitChangelistDialog2" timestamp="1597565085066">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="297" y="23" key="CommitChangelistDialog2/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1597565085066" />
     <state x="529" y="216" key="FileChooserDialogImpl" timestamp="1597026811716">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
@@ -95,6 +122,22 @@
     </state>
     <state x="405" y="201" width="1338" height="826" key="SettingsEditor/0.0.2048.1112/2560.0.1920.1040@0.0.2048.1112" timestamp="1597304209562" />
     <state x="194" y="123" width="941" height="722" key="SettingsEditor/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1597472254567" />
+    <state x="320" y="197" key="Vcs.Push.Dialog.v2" timestamp="1597565086629">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="320" y="197" key="Vcs.Push.Dialog.v2/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1597565086629" />
+    <state x="1447" y="29" width="1893" height="1042" maximized="true" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1597636689310">
+      <screen x="1440" y="23" width="1920" height="1057" />
+    </state>
+    <state x="1447" y="29" width="1893" height="1042" maximized="true" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1597636689310" />
+    <state x="499" y="120" key="com.intellij.openapi.vcs.changes.SpecificFilesViewDialog" timestamp="1597819085999">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="499" y="120" key="com.intellij.openapi.vcs.changes.SpecificFilesViewDialog/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1597819085999" />
+    <state x="422" y="200" width="596" height="522" key="find.popup" timestamp="1597766167319">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="422" y="200" width="596" height="522" key="find.popup/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1597766167319" />
     <state x="687" y="243" width="672" height="678" key="search.everywhere.popup" timestamp="1597131225346">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>

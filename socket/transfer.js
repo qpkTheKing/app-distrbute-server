@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const Axios = require('axios');
-const ProgressBar = require('progress');
+const App = require('../models/App');
 
 // 发送文件
 function sendFile(stream, totalSize, mimeType, socket) {
@@ -19,7 +18,7 @@ function sendFile(stream, totalSize, mimeType, socket) {
           totalSize,
           data: chunk
         }, data => {
-          const { message, trunkNumber } = data;
+          const {message, trunkNumber} = data;
           if (message === "APP-DELIVERY-TRUNK-SUCCESS") {
             // console.log(`${trunkNumber} Trunk received successful.`);
           }
@@ -38,9 +37,24 @@ function sendFile(stream, totalSize, mimeType, socket) {
 }
 
 // 选择指定的文件进行下载
-const makeFile = async (fileHash, fileName, email) => {
-  return new Promise((resolve, reject) => {
+const chooseFile = async (appId, fileId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { files: allFiles } = await App.findOne({ appId }).populate({path: 'files'}).exec();
+      const tempFile = path.resolve(process.cwd(), 'uploader', 'data', fileId);
 
+      const files = allFiles.filter(file => {
+        return file.forDownload === "TRUE" && file.hashId === fileId;
+      });
+
+      const { hashId } = files[0];
+      const stat = fs.statSync(tempFile);
+      const stream = fs.createReadStream(tempFile, {encoding: null});
+      resolve({stream, totalSize: stat.size});
+    } catch (error) {
+      console.log(error);
+      reject(error);
+    }
   });
 };
 
@@ -51,12 +65,13 @@ const transferServerSide = socketIO => {
     if (hash !== undefined && hash !== null) {
       return next();
     }
-    return next(new Error('hash is required for download file.'));
+    // return next(new Error('hash is required for download file.'));
+    return next();
   });
   socketIO.of('/files').on('connection', socket => {
     socket.on("APP-NEED-DELIVERY", async (file, fn) => {
-      const { fileHash, fileName, email } = file;
-      const { stream, totalSize } = await makeFile(fileHash, fileName, email);
+      const {appId, fileId} = file;
+      const {stream, totalSize} = await chooseFile(appId, fileId);
       fn("APP-BEGIN-DELIVERY");
       await sendFile(stream, totalSize, "application/octet-stream", socket);
     });
