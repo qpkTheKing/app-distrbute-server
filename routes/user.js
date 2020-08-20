@@ -205,6 +205,7 @@ router.get('/user/download', async (req, resp) => {
     resp.send({
       code: 200, message: '', data: {
         download: `${downloadSrv}/${fileHash}`,
+        fileHash,
         appName,
         icon,
         version,

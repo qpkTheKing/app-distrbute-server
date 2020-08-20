@@ -26,7 +26,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e4fb159b-64d7-46b6-8cae-1367c1e2ecaf" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,9 +51,9 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="dart.analysis.tool.window.visible" value="false" />
-    <property name="javascript.nodejs.core.library.configured.version" value="13.11.0" />
-    <property name="javascript.nodejs.core.library.typings.version" value="13.11.0" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/uploder/data" />
+    <property name="javascript.nodejs.core.library.configured.version" value="12.18.2" />
+    <property name="javascript.nodejs.core.library.typings.version" value="12.12.54" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -88,6 +90,12 @@
       <workItem from="1597388746457" duration="1830000" />
       <workItem from="1597471332696" duration="12801000" />
       <workItem from="1597652232333" duration="25162000" />
+      <workItem from="1597846564709" duration="1328000" />
+      <workItem from="1597856469736" duration="623000" />
+      <workItem from="1597895271082" duration="11000" />
+      <workItem from="1597903948310" duration="65000" />
+      <workItem from="1597910756607" duration="603000" />
+      <workItem from="1597922260727" duration="1278000" />
     </task>
     <task id="LOCAL-00001" summary="提交部分修改">
       <created>1597565085216</created>
@@ -131,6 +139,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="提交部分修改" />
@@ -149,10 +158,11 @@
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="297" y="23" key="CommitChangelistDialog2/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1597819104431" />
-    <state x="529" y="216" key="FileChooserDialogImpl" timestamp="1597026811716">
+    <state x="529" y="216" key="FileChooserDialogImpl" timestamp="1597904012159">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
-    <state x="529" y="216" key="FileChooserDialogImpl/0.0.2048.1112/2560.0.1920.1040@0.0.2048.1112" timestamp="1597026811716" />
+    <state x="529" y="216" key="FileChooserDialogImpl/0.0.2048.1112/2560.0.1920.1040@0.0.2048.1112" timestamp="1597895280667" />
+    <state x="529" y="216" key="FileChooserDialogImpl/2560.0.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1597904012159" />
     <state x="194" y="123" width="941" height="722" key="SettingsEditor" timestamp="1597472254567">
       <screen x="0" y="23" width="1440" height="877" />
     </state>
