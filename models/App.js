@@ -49,6 +49,10 @@ let appSchema = mongoose.Schema({
     type: String,
     require: false
   }],
+  appDescription: {
+    type: String,
+    require: false
+  },
   created: {
     type: Date,
     default: Date.now()

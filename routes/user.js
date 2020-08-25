@@ -99,9 +99,9 @@ router.get('/user/app', auth, async (req, resp) => {
   }
 });
 
-// 客户端上传包后用来更新APP的包文件上下文信息
-router.put('/user/app', auth, async (req, resp) => {
-  const {appId, pkgHashId, pkgFileName} = req.body;
+// 客户端上传包后用来获取APP的包文件上下文信息
+router.get('/user/app/pkg', auth, async (req, resp) => {
+  const {pkgHashId, pkgFileName} = req.query;
   const finalPkgPath = path.resolve(process.cwd(), 'uploader', 'pkgs', `${pkgHashId}-${pkgFileName}`);
   const uploadedFilePath = path.resolve(process.cwd(), 'uploader', 'data', pkgHashId);
 
@@ -121,22 +121,15 @@ router.put('/user/app', auth, async (req, resp) => {
           package,
           icon
         } = pkgInfo;
-        await App.update({appId}, {
-          $set: {
+
+        resp.send({
+          code: 200, message: '', data: {
             size: fileState.size,
             version: versionName,
             applicationId: package,
             versionCode: versionCode,
             sha1: 'NOT_SET',
             'icon': icon
-          }
-        });
-        resp.send({
-          code: 200, message: '', data: {
-            versionCode,
-            versionName,
-            package,
-            icon
           }
         });
       }
@@ -150,23 +143,115 @@ router.put('/user/app', auth, async (req, resp) => {
 // 客户端上传文件后添加对应的数据库条目
 router.post('/user/app/file', auth, async (req, resp) => {
   try {
-    const {hashId, size, fileName, type, appId, forDownload, downloadUrl} = req.body;
+    const { email } = req.user;
+    const { hashId, size, fileName, type, appId, forDownload, downloadUrl, appDescription, pkgMeta, fileDbId } = req.body;
 
-    const newFile = new File({
-      hashId,
-      appId,
-      name: fileName,
-      size, fType: type,
-      forDownload,
-      downloadTimes: "0",
-      downloadUrl
-    });
-    await newFile.save();
+    async function hasExistsFile() {
+      const userWithApps = await User.aggregate([
+        {
+          $match: {email}
+        },
+        {
+          $lookup: {
+            from: 'apps',
+            localField: 'apps',
+            foreignField: '_id',
+            as: 'ownerdApps'
+          }
+        }
+      ]);
+      const app = userWithApps[0]['ownerdApps'].filter(app => {
+        return app.appId === appId;
+      })[0];
+      const existsFile = app.files.filter(file => {
+        return file.toString() === fileDbId.toString()
+      });
 
-    await App.update({appId}, {$addToSet: {files: [newFile._id]}});
+      return existsFile && existsFile.length > 0;
+    }
 
-    resp.send({code: 200, message: 'DONE'});
+    // 如果没有hashId，表面没有上传过文件，只需更新文件的描述和截图等信息.
+    if (hashId) {
+      const {
+        version,
+        applicationId,
+        versionCode,
+        sha1,
+        icon
+      } = pkgMeta;
+
+      if (appId) {
+        const { files } = await App.findOne({appId});
+        if (files.length === 0) {
+          await App.update({appId}, {
+            $set: {
+              appDescription,
+              version,
+              applicationId,
+              versionCode,
+              sha1,
+              icon
+            }
+          });
+        }
+      }
+      if (fileDbId) {
+        if (await hasExistsFile()) {
+          await File.updateOne({_id: fileDbId}, {
+            $set: {
+              name: fileName,
+              description: appDescription,
+              downloadUrl,
+              forDownload,
+              fType: type,
+              size,
+              hashId,
+              version,
+              applicationId,
+              versionCode,
+              sha1,
+              icon
+            }
+          });
+        } else {
+          const newFile = new File({
+            hashId,
+            appId,
+            name: fileName,
+            size,
+            fType: type,
+            forDownload,
+            downloadTimes: "0",
+            description: appDescription,
+            downloadUrl,
+            version,
+            applicationId,
+            versionCode,
+            sha1,
+            icon
+          });
+
+          await newFile.save();
+          await App.update({appId}, {$addToSet: {files: [newFile._id]}});
+        }
+      }
+    } else {
+      if (fileDbId) {
+        if (await hasExistsFile()) {
+          await File.updateOne({_id: fileDbId}, {
+            $set: {
+              description: appDescription,
+              forDownload: forDownload,
+              fType: type,
+            }
+          });
+        }
+      }
+    }
+
+    resp.send({code: 200, message: 'DONE', data: []});
   } catch (error) {
+    console.log(error);
     resp.status(400).send(error);
   }
 });
@@ -188,6 +273,29 @@ router.get('/user/app/files', auth, async (req, resp) => {
 
     resp.send({code: 200, message: '', data: ownerdApps[0]['files']});
   } catch (error) {
+    resp.status(400).send(error);
+  }
+});
+
+// 查询指定文件的信息
+router.get('/user/app/file', auth, async (req, resp) => {
+  const {fileId} = req.query;
+  try {
+    const file = await File.findOne({_id: fileId});
+    resp.send({code: 200, message: '', data: file});
+  }
+  catch (error) {
+    console.log(error);
+    resp.status(400).send(error);
+  }
+});
+
+// 更新指定品牌下的文件
+router.put('/user/app/file', auth, async (req, resp) => {
+  try {
+    const { hashId, size, fileName, type, appId, forDownload, downloadUrl, fileDBId } = req.body;
+  } catch (error) {
+    console.log(error);
     resp.status(400).send(error);
   }
 });
