@@ -213,27 +213,26 @@ router.post('/user/app/file', auth, async (req, resp) => {
               icon
             }
           });
-        } else {
-          const newFile = new File({
-            hashId,
-            appId,
-            name: fileName,
-            size,
-            fType: type,
-            forDownload,
-            downloadTimes: "0",
-            description: appDescription,
-            downloadUrl,
-            version,
-            applicationId,
-            versionCode,
-            sha1,
-            icon
-          });
-
-          await newFile.save();
-          await App.update({appId}, {$addToSet: {files: [newFile._id]}});
         }
+      } else {
+        const newFile = new File({
+          hashId,
+          appId,
+          name: fileName,
+          size,
+          fType: type,
+          forDownload,
+          downloadTimes: "0",
+          description: appDescription,
+          downloadUrl,
+          version,
+          applicationId,
+          versionCode,
+          sha1,
+          icon
+        });
+        await newFile.save();
+        await App.update({appId}, {$addToSet: {files: [newFile._id]}});
       }
     } else {
       if (fileDbId) {
