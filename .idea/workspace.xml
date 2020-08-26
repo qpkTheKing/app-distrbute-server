@@ -47,6 +47,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="dart.analysis.tool.window.visible" value="false" />
@@ -101,7 +102,8 @@
       <workItem from="1598344262684" duration="173000" />
       <workItem from="1598344933663" duration="821000" />
       <workItem from="1598345769487" duration="11655000" />
-      <workItem from="1598367511675" duration="1821000" />
+      <workItem from="1598367511675" duration="2569000" />
+      <workItem from="1598401444921" duration="6107000" />
     </task>
     <task id="LOCAL-00001" summary="提交部分修改">
       <created>1597565085216</created>
@@ -131,7 +133,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598366736290</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="提交部分修改">
+      <created>1598369381037</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1598369381037</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -174,11 +183,11 @@
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="675" y="357" key="#com.intellij.fileTypes.FileTypeChooser/0.0.2048.1112/2560.0.1920.1040@0.0.2048.1112" timestamp="1597134816955" />
-    <state x="422" y="0" key="CommitChangelistDialog2" timestamp="1598366735678">
+    <state x="422" y="0" key="CommitChangelistDialog2" timestamp="1598369380467">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="297" y="23" key="CommitChangelistDialog2/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1597819104431" />
-    <state x="422" y="0" key="CommitChangelistDialog2/2560.0.1536.824/0.0.2048.1112@0.0.2048.1112" timestamp="1598366735678" />
+    <state x="422" y="0" key="CommitChangelistDialog2/2560.0.1536.824/0.0.2048.1112@0.0.2048.1112" timestamp="1598369380467" />
     <state x="422" y="0" key="CommitChangelistDialog2/2560.0.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1597932965608" />
     <state x="529" y="216" key="FileChooserDialogImpl" timestamp="1597904012159">
       <screen x="0" y="0" width="2048" height="1112" />
@@ -192,11 +201,11 @@
     <state x="194" y="123" width="941" height="722" key="SettingsEditor/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1597472254567" />
     <state x="887" y="184" key="SettingsEditor/2560.0.1536.824/0.0.2048.1112@0.0.2048.1112" timestamp="1598347090706" />
     <state x="134" y="102" key="SettingsEditor/2560.0.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1598344435221" />
-    <state x="455" y="221" key="Vcs.Push.Dialog.v2" timestamp="1598366737667">
+    <state x="455" y="221" key="Vcs.Push.Dialog.v2" timestamp="1598369384616">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="320" y="197" key="Vcs.Push.Dialog.v2/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1597819106663" />
-    <state x="455" y="221" key="Vcs.Push.Dialog.v2/2560.0.1536.824/0.0.2048.1112@0.0.2048.1112" timestamp="1598366737667" />
+    <state x="455" y="221" key="Vcs.Push.Dialog.v2/2560.0.1536.824/0.0.2048.1112@0.0.2048.1112" timestamp="1598369384616" />
     <state x="455" y="221" key="Vcs.Push.Dialog.v2/2560.0.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1597932967932" />
     <state x="1447" y="29" width="1893" height="1042" maximized="true" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1597636689310">
       <screen x="1440" y="23" width="1920" height="1057" />

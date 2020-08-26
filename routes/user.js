@@ -143,8 +143,8 @@ router.get('/user/app/pkg', auth, async (req, resp) => {
 // 客户端上传文件后添加对应的数据库条目
 router.post('/user/app/file', auth, async (req, resp) => {
   try {
-    const { email } = req.user;
-    const { hashId, size, fileName, type, appId, forDownload, downloadUrl, appDescription, pkgMeta, fileDbId } = req.body;
+    const {email} = req.user;
+    const {hashId, size, fileName, type, appId, forDownload, downloadUrl, appDescription, pkgMeta, fileDbId} = req.body;
 
     async function hasExistsFile() {
       const userWithApps = await User.aggregate([
@@ -181,7 +181,7 @@ router.post('/user/app/file', auth, async (req, resp) => {
       } = pkgMeta;
 
       if (appId) {
-        const { files } = await App.findOne({appId});
+        const {files} = await App.findOne({appId});
         if (files.length === 0) {
           await App.update({appId}, {
             $set: {
@@ -282,8 +282,7 @@ router.get('/user/app/file', auth, async (req, resp) => {
   try {
     const file = await File.findOne({_id: fileId});
     resp.send({code: 200, message: '', data: file});
-  }
-  catch (error) {
+  } catch (error) {
     console.log(error);
     resp.status(400).send(error);
   }
@@ -292,7 +291,7 @@ router.get('/user/app/file', auth, async (req, resp) => {
 // 更新指定品牌下的文件
 router.put('/user/app/file', auth, async (req, resp) => {
   try {
-    const { hashId, size, fileName, type, appId, forDownload, downloadUrl, fileDBId } = req.body;
+    const {hashId, size, fileName, type, appId, forDownload, downloadUrl, fileDBId} = req.body;
   } catch (error) {
     console.log(error);
     resp.status(400).send(error);
@@ -301,23 +300,22 @@ router.put('/user/app/file', auth, async (req, resp) => {
 
 // 计算浏览次数
 router.get('/user/download', async (req, resp) => {
-  const {fileHash, downloadDate} = req.query;
-  const downloadSrv = 'https://localhost:1080/files';
+  const {fileHash} = req.query;
 
   try {
-    const {downloadTimes, name, appId, size} = await File.findOne({hashId: fileHash});
-    const { name: appName, icon, version, owner } = await App.findOne({ appId });
+    const {downloadTimes, name, appId, size, icon: fileIcon, version: fileVersion, description} = await File.findOne({hashId: fileHash});
+    const {name: appName, owner, icon: appIcon, version: appVersion} = await App.findOne({appId});
     const newTimes = parseInt(downloadTimes) + 1;
     await File.update({hashId: fileHash}, {$set: {downloadTimes: newTimes.toString()}});
     resp.send({
       code: 200, message: '', data: {
-        download: `${downloadSrv}/${fileHash}`,
         fileHash,
         appName,
-        icon,
-        version,
+        icon: fileIcon ? fileIcon : appIcon,
+        version: fileVersion ? fileVersion : appVersion,
         email: owner,
         fileName: name,
+        description: description ? description : '还没有任何描述',
         size,
         appId
       }
