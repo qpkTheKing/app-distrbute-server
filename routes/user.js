@@ -355,7 +355,7 @@ router.post('/user/quota', async (req, resp) => {
 
     await User.update({email}, {$set: {quota: leftQuota.toString()}});
 
-    resp.send({code: 200, message: '', data: leftQuota});
+    resp.send({code: 200, message: '', data: leftQuota.toFixed(2)});
   } catch (error) {
     resp.status(400).send(error);
   }
