@@ -26,7 +26,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e4fb159b-64d7-46b6-8cae-1367c1e2ecaf" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/models/Image.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/File.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/File.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/User.js" beforeDir="false" afterPath="$PROJECT_DIR$/models/User.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/user.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -53,7 +57,7 @@
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="javascript.nodejs.core.library.configured.version" value="12.18.2" />
     <property name="javascript.nodejs.core.library.typings.version" value="12.12.54" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/uploader" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -104,7 +108,13 @@
       <workItem from="1598345769487" duration="11655000" />
       <workItem from="1598367511675" duration="2569000" />
       <workItem from="1598401444921" duration="7459000" />
-      <workItem from="1598532876804" duration="1338000" />
+      <workItem from="1598532876804" duration="2426000" />
+      <workItem from="1598793770113" duration="640000" />
+      <workItem from="1598840235199" duration="616000" />
+      <workItem from="1598879760737" duration="599000" />
+      <workItem from="1599058778990" duration="442000" />
+      <workItem from="1599096157877" duration="5512000" />
+      <workItem from="1599133534926" duration="4170000" />
     </task>
     <task id="LOCAL-00001" summary="提交部分修改">
       <created>1597565085216</created>
@@ -148,7 +158,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598452866765</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="提交部分修改">
+      <created>1598538847466</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1598538847466</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -191,16 +208,17 @@
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="675" y="357" key="#com.intellij.fileTypes.FileTypeChooser/0.0.2048.1112/2560.0.1920.1040@0.0.2048.1112" timestamp="1597134816955" />
-    <state x="422" y="0" key="CommitChangelistDialog2" timestamp="1598452866253">
+    <state x="422" y="0" key="CommitChangelistDialog2" timestamp="1598538846981">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="297" y="23" key="CommitChangelistDialog2/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1597819104431" />
-    <state x="422" y="0" key="CommitChangelistDialog2/2560.0.1536.824/0.0.2048.1112@0.0.2048.1112" timestamp="1598452866253" />
+    <state x="422" y="0" key="CommitChangelistDialog2/2560.0.1536.824/0.0.2048.1112@0.0.2048.1112" timestamp="1598538846981" />
     <state x="422" y="0" key="CommitChangelistDialog2/2560.0.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1597932965608" />
-    <state x="529" y="216" key="FileChooserDialogImpl" timestamp="1597904012159">
+    <state x="529" y="216" key="FileChooserDialogImpl" timestamp="1598793808923">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="529" y="216" key="FileChooserDialogImpl/0.0.2048.1112/2560.0.1920.1040@0.0.2048.1112" timestamp="1597895280667" />
+    <state x="529" y="216" key="FileChooserDialogImpl/2560.0.1536.824/0.0.2048.1112@0.0.2048.1112" timestamp="1598793808923" />
     <state x="529" y="216" key="FileChooserDialogImpl/2560.0.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1597904012159" />
     <state x="887" y="184" width="941" height="722" key="SettingsEditor" timestamp="1598347090706">
       <screen x="0" y="0" width="2048" height="1112" />
@@ -209,11 +227,11 @@
     <state x="194" y="123" width="941" height="722" key="SettingsEditor/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1597472254567" />
     <state x="887" y="184" key="SettingsEditor/2560.0.1536.824/0.0.2048.1112@0.0.2048.1112" timestamp="1598347090706" />
     <state x="134" y="102" key="SettingsEditor/2560.0.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1598344435221" />
-    <state x="455" y="221" key="Vcs.Push.Dialog.v2" timestamp="1598452867898">
+    <state x="455" y="221" key="Vcs.Push.Dialog.v2" timestamp="1598538848698">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="320" y="197" key="Vcs.Push.Dialog.v2/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1597819106663" />
-    <state x="455" y="221" key="Vcs.Push.Dialog.v2/2560.0.1536.824/0.0.2048.1112@0.0.2048.1112" timestamp="1598452867898" />
+    <state x="455" y="221" key="Vcs.Push.Dialog.v2/2560.0.1536.824/0.0.2048.1112@0.0.2048.1112" timestamp="1598538848698" />
     <state x="455" y="221" key="Vcs.Push.Dialog.v2/2560.0.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1597932967932" />
     <state x="1447" y="29" width="1893" height="1042" maximized="true" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1597636689310">
       <screen x="1440" y="23" width="1920" height="1057" />

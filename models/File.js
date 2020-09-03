@@ -60,6 +60,15 @@ const fileSchema = mongoose.Schema({
     type: String,
     required: false
   },
+  images: [{
+    type: mongoose.Schema.ObjectId,
+    ref: "Image",
+    require: false
+  }],
+  updated: {
+    type: Date,
+    default: Date.now()
+  },
   created: {
     type: Date,
     default: Date.now()

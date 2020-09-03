@@ -40,6 +40,10 @@ let userSchema = mongoose.Schema({
     type: Number,
     required: false
   },
+  role: {
+    type: String,
+    required: false
+  },
   used: {
     type: Number,
     required: false
@@ -65,6 +69,7 @@ userSchema.methods.generateAuthToken = async function () {
   const user = this;
   const token = jwt.sign({ _id: user._id }, JWT_KEY);
   user.tokens = user.tokens.concat({ token });
+  user.role = '0';
   await user.save();
   return token;
 }

@@ -30,8 +30,8 @@ mongoose
 //registering cors
 app.use(cors());
 //configure body parser
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({limit: '800mb', extended: false}));
+app.use(bodyParser.json({limit: '800mb'}));
 //configure body-parser ends here
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 // routes
