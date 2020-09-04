@@ -399,4 +399,42 @@ router.post('/user/quota', async (req, resp) => {
   }
 });
 
+// 管理
+
+// 获得所有用户
+router.get('/user/admin/users', async (req, resp) => {
+  const { name } = req.query;
+  try {
+    if (name) {
+      // todo: 需要添加过滤能力
+    } else {
+      const allUsers = await User.find();
+      resp.send({code: 200, message: '', data: allUsers});
+    }
+  } catch (error) {
+    console.log(error);
+    resp.status(500).send(error);
+  }
+});
+
+// 管理用户流量
+router.post('/user/admin/user/quota', async (req, resp) => {
+  const { userId, newQuota } = req.body;
+
+  try {
+    const user = await User.findOne({_id: userId});
+    if (user) {
+      // const {quota} = user;
+      // const finalQuota = parseFloat(quota) + parseFloat(newQuota);
+      await User.updateOne({_id: userId}, {$set: {quota: newQuota.toString()}});
+    } else {
+      resp.status(400).send('User not Exists.');
+    }
+    resp.send({code: 200, message: '', data: newQuota.toFixed(2)});
+  } catch (error) {
+    console.log(error);
+    resp.status(500).send(error);
+  }
+});
+
 module.exports = router;
