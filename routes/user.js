@@ -123,6 +123,46 @@ router.get('/user/app', auth, async (req, resp) => {
   }
 });
 
+// 删除APP Files.
+router.delete('/user/app/file', auth, async (req, resp) => {
+  const {fileId, appId} = req.query;
+
+  const {name} = File.findOne({hashId: fileId});
+  const finalPkgPath = path.resolve(process.cwd(), 'uploader', 'pkgs', `${fileId}-${name}`);
+  const uploadedFilePath = path.resolve(process.cwd(), 'uploader', 'data', name);
+
+  try {
+    fs.accessSync(finalPkgPath, fs.constants.R_OK | fs.constants.W_OK);
+    fs.accessSync(uploadedFilePath, fs.constants.R_OK | fs.constants.W_OK);
+    fs.unlink(finalPkgPath, err => {
+      if (err && err.code === 'ENOENT') {
+        console.info(`File ${finalPkgPath} doesn't exist, won't remove it.`);
+      } else if (err) {
+        // other errors, e.g. maybe we don't have enough permission
+        console.error(`Error occurred while trying to remove file ${finalPkgPath}`);
+        resp.status(500).send(err);
+      } else {
+        fs.unlink(uploadedFilePath, async err => {
+          if (err && err.code === 'ENOENT') {
+            console.info(`File ${finalPkgPath} doesn't exist, won't remove it.`);
+          } else if (err) {
+            // other errors, e.g. maybe we don't have enough permission
+            console.error(`Error occurred while trying to remove file ${finalPkgPath}`);
+            resp.status(500).send(err);
+          } else {
+            // delete table record.
+            await App.findOne({_id: appId}).update({}, {$pull: {files: fileId}}, {multi: true});
+            resp.send({code: 200, message: 'DONE', data: []});
+          }
+        });
+      }
+    });
+  } catch (e) {
+    console.log(e);
+    resp.status(500).send(e);
+  }
+});
+
 // 客户端上传包后用来获取APP的包文件上下文信息
 router.get('/user/app/pkg', auth, async (req, resp) => {
   const {pkgHashId, pkgFileName} = req.query;
@@ -346,7 +386,7 @@ router.get('/user/download', async (req, resp) => {
 });
 
 // 设置可用流量
-router.post('/user/quota/add',  async (req, resp) => {
+router.post('/user/quota/add', async (req, resp) => {
   try {
     const {usedQuota, email} = req.body;
 
@@ -403,7 +443,7 @@ router.post('/user/quota', async (req, resp) => {
 
 // 获得所有用户
 router.get('/user/admin/users', async (req, resp) => {
-  const { name } = req.query;
+  const {name} = req.query;
   try {
     if (name) {
       // todo: 需要添加过滤能力
@@ -419,14 +459,14 @@ router.get('/user/admin/users', async (req, resp) => {
 
 // 管理用户流量
 router.post('/user/admin/user/quota', async (req, resp) => {
-  const { userId, newQuota } = req.body;
+  const {userId, newQuota} = req.body;
 
   try {
     const user = await User.findOne({_id: userId});
     if (user) {
-      // const {quota} = user;
-      // const finalQuota = parseFloat(quota) + parseFloat(newQuota);
-      await User.updateOne({_id: userId}, {$set: {quota: newQuota.toString()}});
+      const {quota} = user;
+      const finalQuota = parseFloat(quota) + parseFloat(newQuota);
+      await User.updateOne({_id: userId}, {$set: {quota: finalQuota.toString()}});
     } else {
       resp.status(400).send('User not Exists.');
     }
