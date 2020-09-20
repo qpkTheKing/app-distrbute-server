@@ -270,7 +270,8 @@ router.post('/user/app/file', auth, async (req, resp) => {
               applicationId,
               versionCode,
               sha1,
-              icon
+              icon,
+              updated: Date.now()
             }
           });
         }
@@ -363,7 +364,7 @@ router.get('/user/download', async (req, resp) => {
   const {fileHash} = req.query;
 
   try {
-    const {downloadTimes, name, appId, size, icon: fileIcon, version: fileVersion, description} = await File.findOne({hashId: fileHash});
+    const {downloadTimes, name, appId, size, icon: fileIcon, version: fileVersion, description, updated} = await File.findOne({hashId: fileHash});
     const {name: appName, owner, icon: appIcon, version: appVersion} = await App.findOne({appId});
     const newTimes = parseInt(downloadTimes) + 1;
     await File.update({hashId: fileHash}, {$set: {downloadTimes: newTimes.toString()}});
@@ -377,7 +378,8 @@ router.get('/user/download', async (req, resp) => {
         fileName: name,
         description: description ? description : '还没有任何描述',
         size,
-        appId
+        appId,
+        updated
       }
     });
   } catch (error) {
