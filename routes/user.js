@@ -204,6 +204,71 @@ router.get('/user/app/pkg', auth, async (req, resp) => {
   }
 });
 
+// 处理苹果MobileConfig文件
+router.post('/user/app/mobileConfig', auth, async (req, resp) => {
+  const {email} = req.user;
+  const {pkgHashId, pkgFileName, pkgFileId, description, version, appId} = req.body;
+  const downloadServer = 'http://198.13.52.160';
+  let appFile = null;
+
+  try {
+    if (pkgHashId) {
+      const finalPkgPath = path.resolve(process.cwd(), 'uploader', 'mobileConfigs', `${pkgHashId}-${pkgFileName}`);
+      const uploadedFilePath = path.resolve(process.cwd(), 'uploader', 'data', pkgHashId);
+      const fileState = fs.statSync(uploadedFilePath);
+      fs.copyFileSync(uploadedFilePath, finalPkgPath);
+      if (pkgFileId) {
+        if (await hasExistsFile(email)) {
+          await File.updateOne({_id: pkgFileId}, {
+            $set: {
+              name: pkgFileName,
+              hashId: pkgHashId,
+              size: fileState.size,
+              description,
+              version,
+              downloadUrl: `${downloadServer}/uploader/mobileConfigs/${pkgHashId}-${pkgFileName}`,
+              appleUpdated: Date.now()
+            }
+          });
+        }
+      } else {
+        appFile = new File({
+          appId,
+          name: pkgFileName,
+          fType: 'mobile-config',
+          hashId: pkgHashId,
+          size: fileState.size,
+          downloadTimes: "0",
+          description,
+          version,
+          downloadUrl: `${downloadServer}/uploader/mobileConfigs/${pkgHashId}-${pkgFileName}`
+        });
+        await appFile.save();
+        await App.update({appId}, {$addToSet: {files: [appFile._id]}});
+      }
+      resp.send({
+        code: 200, message: '', data: {
+          size: fileState.size,
+          downloadUrl: `${downloadServer}/uploader/mobileConfigs/${pkgHashId}-${pkgFileName}`
+        }
+      });
+    } else {
+      await File.updateOne({_id: pkgFileId}, {
+        $set: {
+          description,
+          appleUpdated: Date.now()
+        }
+      });
+      resp.send({
+        code: 200, message: 'update successfully done.', data: {}
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    resp.status(500).send(error);
+  }
+});
+
 // 上传宣传图片
 router.post('/user/app/image', auth, async (req, resp) => {
   const {fileDbId, images} = req.body;
@@ -364,7 +429,7 @@ router.get('/user/download', async (req, resp) => {
   const {fileHash} = req.query;
 
   try {
-    const {downloadTimes, name, appId, size, icon: fileIcon, version: fileVersion, description, updated} = await File.findOne({hashId: fileHash});
+    const {downloadTimes, name, appId, size, icon: fileIcon, version: fileVersion, description, downloadUrl, fType, updated} = await File.findOne({hashId: fileHash});
     const {name: appName, owner, icon: appIcon, version: appVersion} = await App.findOne({appId});
     const newTimes = parseInt(downloadTimes) + 1;
     await File.update({hashId: fileHash}, {$set: {downloadTimes: newTimes.toString()}});
@@ -372,6 +437,10 @@ router.get('/user/download', async (req, resp) => {
       code: 200, message: '', data: {
         fileHash,
         appName,
+        type: fType === 'mobile-config' ? 'ios' : 'android',
+        ios: {
+          downloadUrl
+        },
         icon: fileIcon ? fileIcon : appIcon,
         version: fileVersion ? fileVersion : appVersion,
         email: owner,

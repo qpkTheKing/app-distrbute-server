@@ -25,7 +25,7 @@ const fileSchema = mongoose.Schema({
   },
   forDownload: {
     type: String,
-    required: true
+    required: false
   },
   downloadTimes: {
     type: String,
@@ -66,6 +66,10 @@ const fileSchema = mongoose.Schema({
     require: false
   }],
   updated: {
+    type: Date,
+    default: Date.now()
+  },
+  appleUpdated: {
     type: Date,
     default: Date.now()
   },
