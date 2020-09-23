@@ -208,7 +208,7 @@ router.get('/user/app/pkg', auth, async (req, resp) => {
 router.post('/user/app/mobileConfig', auth, async (req, resp) => {
   const {email} = req.user;
   const {pkgHashId, pkgFileName, pkgFileId, description, version, appId} = req.body;
-  const downloadServer = 'http://198.13.52.160';
+  const downloadServer = 'http://198.13.52.160:4000';
   let appFile = null;
 
   try {
@@ -226,7 +226,7 @@ router.post('/user/app/mobileConfig', auth, async (req, resp) => {
               size: fileState.size,
               description,
               version,
-              downloadUrl: `${downloadServer}/uploader/mobileConfigs/${pkgHashId}-${pkgFileName}`,
+              downloadUrl: `${downloadServer}/${pkgHashId}-${pkgFileName}`,
               appleUpdated: Date.now()
             }
           });
