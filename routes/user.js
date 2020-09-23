@@ -241,7 +241,7 @@ router.post('/user/app/mobileConfig', auth, async (req, resp) => {
           downloadTimes: "0",
           description,
           version,
-          downloadUrl: `${downloadServer}/uploader/mobileConfigs/${pkgHashId}-${pkgFileName}`
+          downloadUrl:`${downloadServer}/${pkgHashId}-${pkgFileName}`
         });
         await appFile.save();
         await App.update({appId}, {$addToSet: {files: [appFile._id]}});
