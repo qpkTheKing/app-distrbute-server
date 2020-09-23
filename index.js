@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const PORT = process.env.PORT || 4000;
 const morgan = require("morgan");
 const cors = require("cors");
@@ -9,6 +10,22 @@ const userRouter = require("./routes/user");
 const app = express();
 const http = require('http').createServer(app);
 const socketAPI = require('./socket/transfer');
+const serveStatic = require('serve-static');
+const contentDisposition = require('content-disposition')
+
+// static for mobileconfig
+const mobileConfigs = path.resolve(process.cwd(), 'uploader', 'mobileConfigs');
+const setHeaders  = (res, path) => {
+  res.setHeader('Content-Disposition', contentDisposition(path));
+  res.setHeader('Cache-Control', 'public, max-age=0');
+  res.setHeader('Content-type', 'application/x-apple-aspen-config; charset=utf-8');
+};
+const serve = serveStatic(mobileConfigs, {
+  'index': false,
+  'setHeaders': setHeaders
+});
+app.use(serve);
+
 
 // IO Save in GLOBAL.
 const socketIO = require('socket.io')(http);
