@@ -414,13 +414,44 @@ router.get('/user/app/file', auth, async (req, resp) => {
   }
 });
 
-// 更新指定品牌下的文件
-router.put('/user/app/file', auth, async (req, resp) => {
+// 删除指定品牌下得文件
+router.delete('/user/app', auth, async (req, resp) => {
+  const { appId, hashId } = req.query;
+  const { email } = req.user;
+
   try {
-    const {hashId, size, fileName, type, appId, forDownload, downloadUrl, fileDBId} = req.body;
+    const allApps = await User.find({email}).populate({
+      path: "apps",
+      populate: {path: "files"}
+    }).exec();
+
+    const apps = allApps[0]['apps'].filter(app => {
+      return app.appId === appId;
+    });
+
+    if (apps.length > 0) {
+      for (const app of apps) {
+        const { files } = app;
+        if (hashId) {
+          await File.findOneAndDelete({ hashId });
+          resp.send({code: 200, message: 'Delete File Successful.', data: ''});
+        } else {
+          if (files.length > 0) {
+            for (const file of files) {
+              await File.findOneAndDelete({ _id: file._id });
+            }
+          }
+          await App.findOneAndDelete({ _id: app._id });
+          resp.send({code: 200, message: 'Delete App Successful.', data: ''});
+        }
+      }
+    } else {
+      resp.send({code: 400, message: 'App Id Not Exists.', data: ''});
+    }
+
   } catch (error) {
     console.log(error);
-    resp.status(400).send(error);
+    resp.status(500).send(error);
   }
 });
 
