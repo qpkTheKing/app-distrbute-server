@@ -5,15 +5,15 @@ const auth = require('../middleware/auth');
 const User = require('../models/User');
 const File = require('../models/File');
 const App = require('../models/App');
-const {v4: uuidv4} = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 const PkgReader = require('reiko-parser');
 
 const router = express.Router();
 
-async function hasExistsFile(email) {
+async function hasExistsFile(email, appId, fileDbId) {
   const userWithApps = await User.aggregate([
     {
-      $match: {email}
+      $match: { email }
     },
     {
       $lookup: {
@@ -40,7 +40,7 @@ router.post('/user/register', async (req, res) => {
     const user = new User(req.body);
     await user.save();
     const token = await user.generateAuthToken();
-    res.status(201).send({token});
+    res.status(201).send({ token });
   } catch (error) {
     res.status(400).send(error);
   }
@@ -49,13 +49,13 @@ router.post('/user/register', async (req, res) => {
 // 登陆
 router.post('/user/login', async (req, res) => {
   try {
-    const {email, password} = req.body;
+    const { email, password } = req.body;
     const user = await User.findByCredentials(email, password);
     if (!user) {
-      return res.status(401).send({error: 'Login failed! Check authentication credentials'});
+      return res.status(401).send({ error: 'Login failed! Check authentication credentials' });
     }
     const token = await user.generateAuthToken();
-    res.send({token});
+    res.send({ token });
   } catch (error) {
     res.status(400).send(error);
   }
@@ -63,25 +63,25 @@ router.post('/user/login', async (req, res) => {
 
 // 查询个人信息
 router.get('/user/me', auth, async (req, res) => {
-  const {email} = req.user;
-  const result = await User.find({email});
-  const {name, quota, role, created} = result[0];
-  res.send({code: 200, message: '', data: {name, email, quota, created, role}});
+  const { email } = req.user;
+  const result = await User.find({ email });
+  const { name, quota, role, created } = result[0];
+  res.send({ code: 200, message: '', data: { name, email, quota, created, role } });
 });
 
 // 创建新的APP
 router.post('/user/app', auth, async (req, resp) => {
   try {
-    const {name} = req.body;
+    const { name } = req.body;
     const user = req.user;
     const uuid = uuidv4().split('-').join('');
 
-    const newApp = new App({name, appId: uuid, owner: user.email});
+    const newApp = new App({ name, appId: uuid, owner: user.email });
     await newApp.save();
 
-    await User.update({email: user.email}, {$addToSet: {apps: [newApp._id]}});
+    await User.update({ email: user.email }, { $addToSet: { apps: [newApp._id] } });
 
-    resp.send({code: 200, message: 'DONE'});
+    resp.send({ code: 200, message: 'DONE' });
   } catch (error) {
     resp.status(400).send(error);
   }
@@ -89,14 +89,14 @@ router.post('/user/app', auth, async (req, resp) => {
 
 // 查询用户APP
 router.get('/user/app', auth, async (req, resp) => {
-  const {email} = req.user;
-  const {appId} = req.query;
+  const { email } = req.user;
+  const { appId } = req.query;
   let resultApp;
 
   try {
     const userWithApps = await User.aggregate([
       {
-        $match: {email}
+        $match: { email }
       },
       {
         $lookup: {
@@ -116,7 +116,7 @@ router.get('/user/app', auth, async (req, resp) => {
       resultApp = userWithApps[0]['ownerdApps'];
     }
 
-    resp.send({code: 200, data: resultApp, message: ''});
+    resp.send({ code: 200, data: resultApp, message: '' });
   } catch (error) {
     console.log(error);
     resp.status(400).send(error);
@@ -125,9 +125,9 @@ router.get('/user/app', auth, async (req, resp) => {
 
 // 删除APP Files.
 router.delete('/user/app/file', auth, async (req, resp) => {
-  const {fileId, appId} = req.query;
+  const { fileId, appId } = req.query;
 
-  const {name} = File.findOne({hashId: fileId});
+  const { name } = File.findOne({ hashId: fileId });
   const finalPkgPath = path.resolve(process.cwd(), 'uploader', 'pkgs', `${fileId}-${name}`);
   const uploadedFilePath = path.resolve(process.cwd(), 'uploader', 'data', name);
 
@@ -151,8 +151,8 @@ router.delete('/user/app/file', auth, async (req, resp) => {
             resp.status(500).send(err);
           } else {
             // delete table record.
-            await App.findOne({_id: appId}).update({}, {$pull: {files: fileId}}, {multi: true});
-            resp.send({code: 200, message: 'DONE', data: []});
+            await App.findOne({ _id: appId }).update({}, { $pull: { files: fileId } }, { multi: true });
+            resp.send({ code: 200, message: 'DONE', data: [] });
           }
         });
       }
@@ -165,7 +165,7 @@ router.delete('/user/app/file', auth, async (req, resp) => {
 
 // 客户端上传包后用来获取APP的包文件上下文信息
 router.get('/user/app/pkg', auth, async (req, resp) => {
-  const {pkgHashId, pkgFileName} = req.query;
+  const { pkgHashId, pkgFileName } = req.query;
   const finalPkgPath = path.resolve(process.cwd(), 'uploader', 'pkgs', `${pkgHashId}-${pkgFileName}`);
   const uploadedFilePath = path.resolve(process.cwd(), 'uploader', 'data', pkgHashId);
 
@@ -173,7 +173,7 @@ router.get('/user/app/pkg', auth, async (req, resp) => {
     fs.copyFileSync(uploadedFilePath, finalPkgPath);
 
     const fileState = fs.statSync(uploadedFilePath);
-    const reader = new PkgReader(finalPkgPath, 'apk', {withIcon: true});
+    const reader = new PkgReader(finalPkgPath, 'apk', { withIcon: true });
 
     reader.parse(async (err, pkgInfo) => {
       if (err) {
@@ -206,8 +206,8 @@ router.get('/user/app/pkg', auth, async (req, resp) => {
 
 // 处理苹果MobileConfig文件
 router.post('/user/app/mobileConfig', auth, async (req, resp) => {
-  const {email} = req.user;
-  const {pkgHashId, pkgFileName, pkgFileId, description, version, appId} = req.body;
+  const { email } = req.user;
+  const { pkgHashId, pkgFileName, pkgFileId, description, version, appId } = req.body;
   const downloadServer = 'http://198.13.52.160:4000';
   let appFile = null;
 
@@ -218,8 +218,8 @@ router.post('/user/app/mobileConfig', auth, async (req, resp) => {
       const fileState = fs.statSync(uploadedFilePath);
       fs.copyFileSync(uploadedFilePath, finalPkgPath);
       if (pkgFileId) {
-        if (await hasExistsFile(email)) {
-          await File.updateOne({_id: pkgFileId}, {
+        if (await hasExistsFile(email, appId, pkgFileId)) {
+          await File.updateOne({ _id: pkgFileId }, {
             $set: {
               name: pkgFileName,
               hashId: pkgHashId,
@@ -241,10 +241,10 @@ router.post('/user/app/mobileConfig', auth, async (req, resp) => {
           downloadTimes: "0",
           description,
           version,
-          downloadUrl:`${downloadServer}/${pkgHashId}-${pkgFileName}`
+          downloadUrl: `${downloadServer}/${pkgHashId}-${pkgFileName}`
         });
         await appFile.save();
-        await App.update({appId}, {$addToSet: {files: [appFile._id]}});
+        await App.update({ appId }, { $addToSet: { files: [appFile._id] } });
       }
       resp.send({
         code: 200, message: '', data: {
@@ -253,7 +253,7 @@ router.post('/user/app/mobileConfig', auth, async (req, resp) => {
         }
       });
     } else {
-      await File.updateOne({_id: pkgFileId}, {
+      await File.updateOne({ _id: pkgFileId }, {
         $set: {
           description,
           appleUpdated: Date.now()
@@ -269,31 +269,11 @@ router.post('/user/app/mobileConfig', auth, async (req, resp) => {
   }
 });
 
-// 上传宣传图片
-router.post('/user/app/image', auth, async (req, resp) => {
-  const {fileDbId, images} = req.body;
-  const {email} = req.user;
-  try {
-    if (await hasExistsFile(email)) {
-      JSON.parse(images).forEach(image => {
-        const {hashId, name} = image;
-        const {size} = fs.statSync(path.resolve(process.cwd(), 'uploader', 'data', hashId));
-        File.updateOne({_id: fileDbId}, {$push: {images: {hashId, name, size, created: Date.now()}}}, () => {
-          console.log(`${hashId} insert successful.`);
-        });
-      });
-    }
-  } catch (error) {
-    console.log(error);
-    resp.status(500).send(error);
-  }
-});
-
 // 客户端上传文件后添加对应的数据库条目
 router.post('/user/app/file', auth, async (req, resp) => {
   try {
-    const {email} = req.user;
-    const {hashId, size, fileName, type, appId, forDownload, downloadUrl, appDescription, pkgMeta, fileDbId} = req.body;
+    const { email } = req.user;
+    const { hashId, size, fileName, type, appId, forDownload, downloadUrl, appDescription, pkgMeta, fileDbId } = req.body;
 
     // 如果没有hashId，表面没有上传过文件，只需更新文件的描述和截图等信息.
     if (hashId) {
@@ -306,9 +286,9 @@ router.post('/user/app/file', auth, async (req, resp) => {
       } = pkgMeta;
 
       if (appId) {
-        const {files} = await App.findOne({appId});
+        const { files } = await App.findOne({ appId });
         if (files.length === 0) {
-          await App.update({appId}, {
+          await App.update({ appId }, {
             $set: {
               appDescription,
               version,
@@ -321,8 +301,8 @@ router.post('/user/app/file', auth, async (req, resp) => {
         }
       }
       if (fileDbId) {
-        if (await hasExistsFile(email)) {
-          await File.updateOne({_id: fileDbId}, {
+        if (await hasExistsFile(email, appId, fileDbId)) {
+          await File.updateOne({ _id: fileDbId }, {
             $set: {
               name: fileName,
               description: appDescription,
@@ -358,12 +338,12 @@ router.post('/user/app/file', auth, async (req, resp) => {
           icon
         });
         await newFile.save();
-        await App.update({appId}, {$addToSet: {files: [newFile._id]}});
+        await App.update({ appId }, { $addToSet: { files: [newFile._id] } });
       }
     } else {
       if (fileDbId) {
-        if (await hasExistsFile()) {
-          await File.updateOne({_id: fileDbId}, {
+        if (await hasExistsFile(email, appId, fileDbId)) {
+          await File.updateOne({ _id: fileDbId }, {
             $set: {
               description: appDescription,
               forDownload: forDownload,
@@ -374,7 +354,7 @@ router.post('/user/app/file', auth, async (req, resp) => {
       }
     }
 
-    resp.send({code: 200, message: 'DONE', data: []});
+    resp.send({ code: 200, message: 'DONE', data: [] });
   } catch (error) {
     console.log(error);
     resp.status(400).send(error);
@@ -383,20 +363,20 @@ router.post('/user/app/file', auth, async (req, resp) => {
 
 // 查询指定品牌下的文件
 router.get('/user/app/files', auth, async (req, resp) => {
-  const {email} = req.user;
-  const {appId} = req.query;
+  const { email } = req.user;
+  const { appId } = req.query;
 
   try {
-    const result = await User.find({email}).populate({
+    const result = await User.find({ email }).populate({
       path: "apps",
-      populate: {path: "files"}
+      populate: { path: "files" }
     }).exec();
 
     const ownerdApps = result[0]['apps'].filter(app => {
       return app.appId === appId;
     });
 
-    resp.send({code: 200, message: '', data: ownerdApps[0]['files']});
+    resp.send({ code: 200, message: '', data: ownerdApps[0]['files'] });
   } catch (error) {
     resp.status(400).send(error);
   }
@@ -404,10 +384,10 @@ router.get('/user/app/files', auth, async (req, resp) => {
 
 // 查询指定文件的信息
 router.get('/user/app/file', auth, async (req, resp) => {
-  const {fileId} = req.query;
+  const { fileId } = req.query;
   try {
-    const file = await File.findOne({_id: fileId});
-    resp.send({code: 200, message: '', data: file});
+    const file = await File.findOne({ _id: fileId });
+    resp.send({ code: 200, message: '', data: file });
   } catch (error) {
     console.log(error);
     resp.status(400).send(error);
@@ -420,9 +400,9 @@ router.delete('/user/app', auth, async (req, resp) => {
   const { email } = req.user;
 
   try {
-    const allApps = await User.find({email}).populate({
+    const allApps = await User.find({ email }).populate({
       path: "apps",
-      populate: {path: "files"}
+      populate: { path: "files" }
     }).exec();
 
     const apps = allApps[0]['apps'].filter(app => {
@@ -434,7 +414,7 @@ router.delete('/user/app', auth, async (req, resp) => {
         const { files } = app;
         if (hashId) {
           await File.findOneAndDelete({ hashId });
-          resp.send({code: 200, message: 'Delete File Successful.', data: ''});
+          resp.send({ code: 200, message: 'Delete File Successful.', data: '' });
         } else {
           if (files.length > 0) {
             for (const file of files) {
@@ -442,11 +422,11 @@ router.delete('/user/app', auth, async (req, resp) => {
             }
           }
           await App.findOneAndDelete({ _id: app._id });
-          resp.send({code: 200, message: 'Delete App Successful.', data: ''});
+          resp.send({ code: 200, message: 'Delete App Successful.', data: '' });
         }
       }
     } else {
-      resp.send({code: 400, message: 'App Id Not Exists.', data: ''});
+      resp.send({ code: 400, message: 'App Id Not Exists.', data: '' });
     }
 
   } catch (error) {
@@ -455,15 +435,44 @@ router.delete('/user/app', auth, async (req, resp) => {
   }
 });
 
-// 计算浏览次数
-router.get('/user/download', async (req, resp) => {
-  const {fileHash} = req.query;
+// 根据APPID返回激活状态得包
+router.get('/user/download/app', async (req, resp) => {
+  const { appId } = req.query;
 
   try {
-    const {downloadTimes, name, appId, size, icon: fileIcon, version: fileVersion, description, downloadUrl, fType, updated} = await File.findOne({hashId: fileHash});
-    const {name: appName, owner, icon: appIcon, version: appVersion} = await App.findOne({appId});
+    // 获得当前用户得品牌
+    const app = await App.findOne({ appId }).populate({ path: "files" }).exec();
+    const enabledFiles = app.files.filter(file => {
+      return file.forDownload === 'TRUE'
+    });
+
+    if (enabledFiles.length > 0) {
+      resp.send({
+        code: 200, message: '', data: {
+          files: enabledFiles,
+          appName: app.name,
+          email: app.owner
+        }
+      });
+    } else {
+      resp.send({ code: 400, message: 'App Id Not Exists.', data: '' });
+    }
+
+  } catch (error) {
+    console.log(error);
+    resp.status(500).send(error);
+  }
+});
+
+// 返回指定得下载得包
+router.get('/user/download', async (req, resp) => {
+  const { fileHash } = req.query;
+
+  try {
+    const { downloadTimes, name, appId, size, icon: fileIcon, version: fileVersion, description, downloadUrl, fType, updated } = await File.findOne({ hashId: fileHash });
+    const { name: appName, owner, icon: appIcon, version: appVersion } = await App.findOne({ appId });
     const newTimes = parseInt(downloadTimes) + 1;
-    await File.update({hashId: fileHash}, {$set: {downloadTimes: newTimes.toString()}});
+    await File.update({ hashId: fileHash }, { $set: { downloadTimes: newTimes.toString() } });
     resp.send({
       code: 200, message: '', data: {
         fileHash,
@@ -490,16 +499,16 @@ router.get('/user/download', async (req, resp) => {
 // 设置可用流量
 router.post('/user/quota/add', async (req, resp) => {
   try {
-    const {usedQuota, email} = req.body;
+    const { usedQuota, email } = req.body;
 
     const usedQuotaNumber = parseFloat(usedQuota);
-    const user = await User.findOne({email}).exec();
-    const {quota} = user;
+    const user = await User.findOne({ email }).exec();
+    const { quota } = user;
     const newQuota = parseFloat(quota) + usedQuotaNumber;
 
-    await User.update({email}, {$set: {quota: newQuota.toString()}});
+    await User.update({ email }, { $set: { quota: newQuota.toString() } });
 
-    resp.send({code: 200, message: '', data: newQuota.toFixed(2)});
+    resp.send({ code: 200, message: '', data: newQuota.toFixed(2) });
   } catch (error) {
     resp.status(400).send(error);
   }
@@ -508,12 +517,12 @@ router.post('/user/quota/add', async (req, resp) => {
 // 获得可用流量
 router.get('/user/quota', async (req, resp) => {
   try {
-    const {email} = req.query;
+    const { email } = req.query;
 
-    const user = await User.findOne({email}).exec();
-    const {quota} = user;
+    const user = await User.findOne({ email }).exec();
+    const { quota } = user;
 
-    resp.send({code: 200, message: '', data: quota});
+    resp.send({ code: 200, message: '', data: quota });
   } catch (error) {
     resp.status(400).send(error);
   }
@@ -522,20 +531,20 @@ router.get('/user/quota', async (req, resp) => {
 // 扣除流量
 router.post('/user/quota', async (req, resp) => {
   try {
-    const {usedQuota, email} = req.body;
+    const { usedQuota, email } = req.body;
 
     const usedQuotaNumber = parseFloat(usedQuota);
-    const user = await User.findOne({email}).exec();
-    const {quota} = user;
+    const user = await User.findOne({ email }).exec();
+    const { quota } = user;
     const leftQuota = parseFloat(quota) - usedQuotaNumber;
 
     if (leftQuota <= 0) {
       resp.status(400).send('Quota is not enough for download.');
     }
 
-    await User.update({email}, {$set: {quota: leftQuota.toString()}});
+    await User.update({ email }, { $set: { quota: leftQuota.toString() } });
 
-    resp.send({code: 200, message: '', data: leftQuota.toFixed(2)});
+    resp.send({ code: 200, message: '', data: leftQuota.toFixed(2) });
   } catch (error) {
     resp.status(400).send(error);
   }
@@ -545,13 +554,13 @@ router.post('/user/quota', async (req, resp) => {
 
 // 获得所有用户
 router.get('/user/admin/users', async (req, resp) => {
-  const {name} = req.query;
+  const { name } = req.query;
   try {
     if (name) {
       // todo: 需要添加过滤能力
     } else {
       const allUsers = await User.find();
-      resp.send({code: 200, message: '', data: allUsers});
+      resp.send({ code: 200, message: '', data: allUsers });
     }
   } catch (error) {
     console.log(error);
@@ -561,18 +570,18 @@ router.get('/user/admin/users', async (req, resp) => {
 
 // 管理用户流量
 router.post('/user/admin/user/quota', async (req, resp) => {
-  const {userId, newQuota} = req.body;
+  const { userId, newQuota } = req.body;
 
   try {
-    const user = await User.findOne({_id: userId});
+    const user = await User.findOne({ _id: userId });
     if (user) {
-      const {quota} = user;
+      const { quota } = user;
       const finalQuota = parseFloat(quota) + parseFloat(newQuota);
-      await User.updateOne({_id: userId}, {$set: {quota: finalQuota.toString()}});
+      await User.updateOne({ _id: userId }, { $set: { quota: finalQuota.toString() } });
     } else {
       resp.status(400).send('User not Exists.');
     }
-    resp.send({code: 200, message: '', data: newQuota.toFixed(2)});
+    resp.send({ code: 200, message: '', data: newQuota.toFixed(2) });
   } catch (error) {
     console.log(error);
     resp.status(500).send(error);
