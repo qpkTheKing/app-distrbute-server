@@ -258,6 +258,7 @@ router.post('/user/app/mobileConfig', auth, async (req, resp) => {
       await File.updateOne({ _id: pkgFileId }, {
         $set: {
           description,
+          forDownload,
           appleUpdated: Date.now()
         }
       });
