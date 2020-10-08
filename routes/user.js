@@ -273,7 +273,7 @@ router.post('/user/app/mobileConfig', auth, async (req, resp) => {
 router.post('/user/app/file', auth, async (req, resp) => {
   try {
     const { email } = req.user;
-    const { hashId, size, fileName, type, appId, forDownload, downloadUrl, appDescription, pkgMeta, fileDbId } = req.body;
+    const { hashId, size, fileName, fType, appId, forDownload, downloadUrl, appDescription, pkgMeta, fileDbId } = req.body;
 
     // 如果没有hashId，表面没有上传过文件，只需更新文件的描述和截图等信息.
     if (hashId) {
@@ -308,7 +308,7 @@ router.post('/user/app/file', auth, async (req, resp) => {
               description: appDescription,
               downloadUrl,
               forDownload,
-              fType: type,
+              fType,
               size,
               hashId,
               version,
@@ -326,7 +326,7 @@ router.post('/user/app/file', auth, async (req, resp) => {
           appId,
           name: fileName,
           size,
-          fType: type,
+          fType,
           forDownload,
           downloadTimes: "0",
           description: appDescription,
@@ -347,7 +347,7 @@ router.post('/user/app/file', auth, async (req, resp) => {
             $set: {
               description: appDescription,
               forDownload: forDownload,
-              fType: type,
+              fType,
             }
           });
         }
