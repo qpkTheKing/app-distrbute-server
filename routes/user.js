@@ -207,7 +207,7 @@ router.get('/user/app/pkg', auth, async (req, resp) => {
 // 处理苹果MobileConfig文件
 router.post('/user/app/mobileConfig', auth, async (req, resp) => {
   const { email } = req.user;
-  const { pkgHashId, pkgFileName, pkgFileId, description, version, appId } = req.body;
+  const { pkgHashId, pkgFileName, pkgFileId, description, forDownload, version, appId } = req.body;
   const downloadServer = 'http://198.13.52.160:4000';
   let appFile = null;
 
@@ -224,6 +224,7 @@ router.post('/user/app/mobileConfig', auth, async (req, resp) => {
               name: pkgFileName,
               hashId: pkgHashId,
               size: fileState.size,
+              forDownload,
               description,
               version,
               downloadUrl: `${downloadServer}/${pkgHashId}-${pkgFileName}`,
@@ -239,6 +240,7 @@ router.post('/user/app/mobileConfig', auth, async (req, resp) => {
           hashId: pkgHashId,
           size: fileState.size,
           downloadTimes: "0",
+          forDownload,
           description,
           version,
           downloadUrl: `${downloadServer}/${pkgHashId}-${pkgFileName}`
