@@ -616,6 +616,7 @@ router.post('/user/images/sale', async (req, resp, next) => {
     const width = bgImage.width();
     // render text.
     for (let i = 0; i < texts.length; i++) {
+      console.log(texts[i]);
       const tSvg = tts.getSVG(texts[i], {
         x: 0,
         y: 0,
@@ -638,7 +639,6 @@ router.post('/user/images/sale', async (req, resp, next) => {
     const textSelectedTemplateSvg = await svg2png(selectedTemplateFont);
     const selectedTemplateFontImage = imagesEngine(textSelectedTemplateSvg);
     bgImage.draw(selectedTemplateFontImage, width / 20 , selectedTemplateFontImage.width() * texts.length - 400);
-    console.log('1231231231231231233');
     // render images.
     const templateSavePath = path.join(__dirname, '../tmp/template.jpg');
     const mobileImageBuffer = await got(images.mobile).buffer();
