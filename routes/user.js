@@ -7,6 +7,10 @@ const File = require('../models/File');
 const App = require('../models/App');
 const { v4: uuidv4 } = require('uuid');
 const PkgReader = require('reiko-parser');
+const imagesEngine = require('images');
+const svg2png = require('svg2png');
+const text2svg = require('text-to-svg');
+const got = require('got');
 
 const router = express.Router();
 
@@ -467,6 +471,16 @@ router.get('/user/download/app', async (req, resp) => {
   }
 });
 
+router.get('/user/v2/download', async (req, resp) => {
+  const { h: fileHash } = req.query;
+
+  try {
+    const { } = await File.findOne({ hashId: fileHash });
+  } catch (error) {
+    resp.status(400).send(error);
+  }
+});
+
 // 返回指定得下载得包
 router.get('/user/download', async (req, resp) => {
   const { fileHash } = req.query;
@@ -589,6 +603,60 @@ router.post('/user/admin/user/quota', async (req, resp) => {
     console.log(error);
     resp.status(500).send(error);
   }
+});
+
+router.post('/user/images/sale', async (req, resp, next) => {
+  const { texts, images } = req.body;
+
+  try {
+    let textImageWidth = 0;
+    const attributes = {fill: 'white', stroke: 'gray'};
+    const tts = text2svg.loadSync(path.join(__dirname, '../config/msyh.ttf'));
+    const bgImage = imagesEngine(path.join(__dirname, '../config/Red-Background.jpg'));
+    const width = bgImage.width();
+    // render text.
+    for (let i = 0; i < texts.length; i++) {
+      const tSvg = tts.getSVG(texts[i], {
+        x: 0,
+        y: 0,
+        fontSize: 96,
+        anchor: 'top',
+        attributes
+      });
+      const textSvg = await svg2png(tSvg);
+      const textImage = imagesEngine(textSvg);
+      textImageWidth = textImage.width();
+      bgImage.draw(textImage, width / 20 , 200 * ( i + 1 ));
+    }
+    const selectedTemplateFont = tts.getSVG('选定得模板:  ', {
+      x: 0,
+      y: 0,
+      fontSize: 96,
+      anchor: 'top',
+      attributes
+    });
+    const textSelectedTemplateSvg = await svg2png(selectedTemplateFont);
+    const selectedTemplateFontImage = imagesEngine(textSelectedTemplateSvg);
+    bgImage.draw(selectedTemplateFontImage, width / 20 , selectedTemplateFontImage.width() * texts.length - 400);
+    // render images.
+    const templateSavePath = path.join(__dirname, '../tmp/template.jpg');
+    const mobileImageBuffer = await got(images.mobile).buffer();
+    const pcImageBuffer = await got(images.pc).buffer();
+    const mobileImage = imagesEngine(mobileImageBuffer).size(1080, 1920);
+    bgImage.draw(mobileImage, width / 20, textImageWidth * texts.length - 200);
+    const pcImage = imagesEngine(pcImageBuffer).size(1920, 1080);
+    bgImage.draw(pcImage, width / 20 + mobileImage.width() + 100, textImageWidth * texts.length - 200);
+    // save
+    await bgImage.save(templateSavePath);
+    // over
+    resp.send({ code: 200, message: '', data: {
+      url: `http://149.28.28.240/template.jpg`
+    }});
+  } catch (error) {
+    console.log(error);
+    resp.status(500).send(error);
+  }
+
 });
 
 module.exports = router;
