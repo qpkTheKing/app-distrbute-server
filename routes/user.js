@@ -613,7 +613,6 @@ router.post('/user/images/sale', async (req, resp, next) => {
     const attributes = {fill: 'white', stroke: 'gray'};
     const tts = text2svg.loadSync(path.join(process.cwd(), 'config', 'msyh.ttf'));
     const bgImage = imagesEngine(path.join(process.cwd(), 'config', 'Red-Background.jpg'));
-    console.log(1231231231231231231212312312);
     const width = bgImage.width();
     // render text.
     for (let i = 0; i < texts.length; i++) {
@@ -639,6 +638,7 @@ router.post('/user/images/sale', async (req, resp, next) => {
     const textSelectedTemplateSvg = await svg2png(selectedTemplateFont);
     const selectedTemplateFontImage = imagesEngine(textSelectedTemplateSvg);
     bgImage.draw(selectedTemplateFontImage, width / 20 , selectedTemplateFontImage.width() * texts.length - 400);
+    console.log('1231231231231231233');
     // render images.
     const templateSavePath = path.join(__dirname, '../tmp/template.jpg');
     const mobileImageBuffer = await got(images.mobile).buffer();
