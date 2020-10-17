@@ -52,7 +52,7 @@ app.use(saleServer);
 
 
 // IO Save in GLOBAL.
-const socketIO = require('socket.io')(http);
+// const socketIO = require('socket.io')(http);
 
 //configure database and mongoose
 mongoose.set("useCreateIndex", true);
@@ -79,7 +79,7 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 app.use(userRouter);
 
 // start to socket listener
-socketAPI.transferServerSide(socketIO);
+// socketAPI.transferServerSide(socketIO);
 
 http.listen(PORT, () => {
   console.log(`App is running on ${PORT}`);
