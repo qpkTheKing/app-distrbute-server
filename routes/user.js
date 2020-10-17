@@ -625,9 +625,10 @@ router.post('/user/images/sale', async (req, resp, next) => {
         anchor: 'top',
         attributes
       });
-      console.log(tSvg);
       const textSvg = await svg2png(tSvg);
+      console.log(textSvg);
       const textImage = imagesEngine(textSvg);
+      console.log(textImage);
       textImageWidth = textImage.width();
       bgImage.draw(textImage, width / 20 , 200 * ( i + 1 ));
     }
