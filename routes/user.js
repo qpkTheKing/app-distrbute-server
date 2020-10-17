@@ -616,7 +616,6 @@ router.post('/user/images/sale', async (req, resp, next) => {
     const width = bgImage.width();
     // render text.
     for (let i = 0; i < texts.length; i++) {
-      console.log(texts[i]);
       const tSvg = tts.getSVG(texts[i], {
         x: 0,
         y: 0,
@@ -651,7 +650,7 @@ router.post('/user/images/sale', async (req, resp, next) => {
     await bgImage.save(templateSavePath);
     // over
     resp.send({ code: 200, message: '', data: {
-      url: `http://149.28.28.240/template.jpg`
+      url: `http://149.28.28.240:4000/template.jpg`
     }});
   } catch (error) {
     console.log(error);
