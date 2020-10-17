@@ -611,8 +611,8 @@ router.post('/user/images/sale', async (req, resp, next) => {
   try {
     let textImageWidth = 0;
     const attributes = {fill: 'white', stroke: 'gray'};
-    const tts = text2svg.loadSync(path.join(__dirname, '../config/msyh.ttf'));
-    const bgImage = imagesEngine(path.join(__dirname, '../config/Red-Background.jpg'));
+    const tts = text2svg.loadSync(path.join(process.cwd(), 'config', 'msyh.ttf'));
+    const bgImage = imagesEngine(path.join(process.cwd(), 'config', 'Red-Background.jpg'));
     const width = bgImage.width();
     // render text.
     for (let i = 0; i < texts.length; i++) {
