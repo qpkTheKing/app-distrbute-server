@@ -607,6 +607,7 @@ router.post('/user/admin/user/quota', async (req, resp) => {
 
 router.post('/user/images/sale', async (req, resp, next) => {
   const { texts, images } = req.body;
+  const uuid = uuidv4().split('-').join('');
 
   try {
     let textImageWidth = 0;
@@ -631,7 +632,7 @@ router.post('/user/images/sale', async (req, resp, next) => {
     const selectedTemplateFont = tts.getSVG('选定得模板:  ', {
       x: 0,
       y: 0,
-      fontSize: 96,
+      fontSize: 80,
       anchor: 'top',
       attributes
     });
@@ -639,18 +640,18 @@ router.post('/user/images/sale', async (req, resp, next) => {
     const selectedTemplateFontImage = imagesEngine(textSelectedTemplateSvg);
     bgImage.draw(selectedTemplateFontImage, width / 20 , selectedTemplateFontImage.width() * texts.length - 400);
     // render images.
-    const templateSavePath = path.join(__dirname, '../tmp/template.jpg');
+    const templateSavePath = path.join(__dirname, `../tmp/template.${uuid}.jpg`);
     const mobileImageBuffer = await got(images.mobile).buffer();
     const pcImageBuffer = await got(images.pc).buffer();
     const mobileImage = imagesEngine(mobileImageBuffer).size(1080, 1920);
-    bgImage.draw(mobileImage, width / 20, textImageWidth * texts.length - 200);
+    bgImage.draw(mobileImage, width / 20, 1500);
     const pcImage = imagesEngine(pcImageBuffer).size(1920, 1080);
-    bgImage.draw(pcImage, width / 20 + mobileImage.width() + 100, textImageWidth * texts.length - 200);
+    bgImage.draw(pcImage, width / 20 + mobileImage.width() + 100, 1500);
     // save
     await bgImage.save(templateSavePath);
     // over
     resp.send({ code: 200, message: '', data: {
-      url: `http://149.28.28.240:4000/template.jpg`
+      url: `http://149.28.28.240:4000/template.${uuid}.jpg`
     }});
   } catch (error) {
     console.log(error);
