@@ -638,15 +638,15 @@ router.post('/user/images/sale', async (req, resp, next) => {
     });
     const textSelectedTemplateSvg = await svg2png(selectedTemplateFont);
     const selectedTemplateFontImage = imagesEngine(textSelectedTemplateSvg);
-    bgImage.draw(selectedTemplateFontImage, width / 20 , selectedTemplateFontImage.width() * texts.length - 400);
+    // bgImage.draw(selectedTemplateFontImage, width / 20 , selectedTemplateFontImage.width() * texts.length - 400);
     // render images.
     const templateSavePath = path.join(__dirname, `../tmp/template.${uuid}.jpg`);
     const mobileImageBuffer = await got(images.mobile).buffer();
     const pcImageBuffer = await got(images.pc).buffer();
     const mobileImage = imagesEngine(mobileImageBuffer).size(1080, 1920);
-    bgImage.draw(mobileImage, width / 20, 1500);
+    bgImage.draw(mobileImage, width / 20, 1000);
     const pcImage = imagesEngine(pcImageBuffer).size(1920, 1080);
-    bgImage.draw(pcImage, width / 20 + mobileImage.width() + 100, 1500);
+    bgImage.draw(pcImage, width / 20 + mobileImage.width() + 100, 1000);
     // save
     await bgImage.save(templateSavePath);
     // over
