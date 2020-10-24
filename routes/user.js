@@ -651,7 +651,7 @@ router.post('/user/images/sale', async (req, resp, next) => {
     await bgImage.save(templateSavePath);
     // over
     resp.send({ code: 200, message: '', data: {
-      url: `http://149.28.28.240:4000/template.${uuid}.jpg`
+      url: `http://198.13.52.160:4000/template.${uuid}.jpg`
     }});
   } catch (error) {
     console.log(error);
