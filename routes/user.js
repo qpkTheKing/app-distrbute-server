@@ -171,7 +171,7 @@ router.delete('/user/app/file', auth, async (req, resp) => {
 router.get('/user/app/pkg', auth, async (req, resp) => {
   const { pkgHashId, pkgFileName } = req.query;
   const finalPkgPath = path.resolve(process.cwd(), 'uploader', 'pkgs', `${pkgHashId}-${pkgFileName}`);
-  const uploadedFilePath = path.resolve(process.cwd(), 'uploader', 'data', pkgHashId);
+  const uploadedFilePath = path.resolve(process.cwd(), 'files', pkgHashId);
 
   try {
     fs.copyFileSync(uploadedFilePath, finalPkgPath);
