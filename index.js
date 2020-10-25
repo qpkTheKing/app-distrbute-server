@@ -19,7 +19,7 @@ const http = require('http').createServer(app);
 // static for mobileconfig
 const mobileConfigs = path.resolve(process.cwd(), 'uploader', 'mobileConfigs');
 // static for apk
-const apkFiles = path.resolve(process.cwd(), 'uploader', 'data');
+const apkFiles = path.resolve(process.cwd(), 'uploader', 'pkgs');
 // static for sale
 const saleFiles = path.resolve(process.cwd(), 'tmp');
 const setHeaders = (res, path) => {
