@@ -31,7 +31,12 @@
   <component name="ChangeListManager">
     <list default="true" id="e4fb159b-64d7-46b6-8cae-1367c1e2ecaf" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploader/tusd-linux" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploader/tusd-macos" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploader/tusd.exe" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -159,7 +164,8 @@
       <workItem from="1603357003696" duration="1993000" />
       <workItem from="1603386610052" duration="1788000" />
       <workItem from="1603571901115" duration="142000" />
-      <workItem from="1603572079566" duration="1179000" />
+      <workItem from="1603572079566" duration="1781000" />
+      <workItem from="1603663148574" duration="753000" />
     </task>
     <task id="LOCAL-00001" summary="提交部分修改">
       <created>1597565085216</created>
@@ -329,7 +335,14 @@
       <option name="project" value="LOCAL" />
       <updated>1603295840131</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="提交部分修改">
+      <created>1603573493398</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1603573493398</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -373,11 +386,11 @@
     </state>
     <state x="675" y="357" key="#com.intellij.fileTypes.FileTypeChooser/0.0.2048.1112/2560.0.1920.1040@0.0.2048.1112" timestamp="1597134816955" />
     <state x="675" y="357" key="#com.intellij.fileTypes.FileTypeChooser/2560.0.1536.824/0.0.2048.1112@0.0.2048.1112" timestamp="1602802522077" />
-    <state x="422" y="0" key="CommitChangelistDialog2" timestamp="1603295839658">
+    <state x="422" y="0" key="CommitChangelistDialog2" timestamp="1603573492961">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="297" y="23" key="CommitChangelistDialog2/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1597819104431" />
-    <state x="422" y="0" key="CommitChangelistDialog2/2560.0.1536.824/0.0.2048.1112@0.0.2048.1112" timestamp="1603295839658" />
+    <state x="422" y="0" key="CommitChangelistDialog2/2560.0.1536.824/0.0.2048.1112@0.0.2048.1112" timestamp="1603573492961" />
     <state x="422" y="0" key="CommitChangelistDialog2/2560.0.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1597932965608" />
     <state x="529" y="216" key="FileChooserDialogImpl" timestamp="1598793808923">
       <screen x="0" y="0" width="2048" height="1112" />
@@ -392,11 +405,11 @@
     <state x="194" y="123" width="941" height="722" key="SettingsEditor/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1597472254567" />
     <state x="887" y="184" key="SettingsEditor/2560.0.1536.824/0.0.2048.1112@0.0.2048.1112" timestamp="1598347090706" />
     <state x="134" y="102" key="SettingsEditor/2560.0.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1598344435221" />
-    <state x="455" y="221" key="Vcs.Push.Dialog.v2" timestamp="1603295841490">
+    <state x="455" y="221" key="Vcs.Push.Dialog.v2" timestamp="1603573494390">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="320" y="197" key="Vcs.Push.Dialog.v2/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1597819106663" />
-    <state x="455" y="221" key="Vcs.Push.Dialog.v2/2560.0.1536.824/0.0.2048.1112@0.0.2048.1112" timestamp="1603295841490" />
+    <state x="455" y="221" key="Vcs.Push.Dialog.v2/2560.0.1536.824/0.0.2048.1112@0.0.2048.1112" timestamp="1603573494390" />
     <state x="455" y="221" key="Vcs.Push.Dialog.v2/2560.0.1920.1030/0.0.2048.1112@0.0.2048.1112" timestamp="1597932967932" />
     <state x="1447" y="29" width="1893" height="1042" maximized="true" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1597636689310">
       <screen x="1440" y="23" width="1920" height="1057" />
@@ -406,11 +419,11 @@
       <screen x="0" y="23" width="1440" height="877" />
     </state>
     <state x="499" y="120" key="com.intellij.openapi.vcs.changes.SpecificFilesViewDialog/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1597819154753" />
-    <state x="600" y="224" width="848" height="662" key="find.popup" timestamp="1598537084643">
+    <state x="600" y="224" width="848" height="662" key="find.popup" timestamp="1603663644130">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>
     <state x="422" y="200" width="596" height="522" key="find.popup/0.23.1440.877/1440.23.1920.1057@0.23.1440.877" timestamp="1597832624669" />
-    <state x="600" y="224" width="848" height="662" key="find.popup/2560.0.1536.824/0.0.2048.1112@0.0.2048.1112" timestamp="1598537084643" />
+    <state x="600" y="224" width="848" height="662" key="find.popup/2560.0.1536.824/0.0.2048.1112@0.0.2048.1112" timestamp="1603663644130" />
     <state x="681" y="259" key="run.anything.popup" timestamp="1603162793272">
       <screen x="0" y="0" width="2048" height="1112" />
     </state>

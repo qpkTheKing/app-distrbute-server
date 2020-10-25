@@ -7,11 +7,14 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const config = require("./config/db.config");
 const userRouter = require("./routes/user");
-const app = express();
-const http = require('http').createServer(app);
-const socketAPI = require('./socket/transfer');
+const tus = require('tus-node-server');
+const EVENTS = require('tus-node-server').EVENTS;
 const serveStatic = require('serve-static');
 const contentDisposition = require('content-disposition');
+// const socketAPI = require('./socket/transfer');
+
+const app = express();
+const http = require('http').createServer(app);
 
 // static for mobileconfig
 const mobileConfigs = path.resolve(process.cwd(), 'uploader', 'mobileConfigs');
@@ -49,6 +52,21 @@ const saleServer = serveStatic(saleFiles, {
 app.use(serve);
 app.use(apkServer);
 app.use(saleServer);
+
+// TUS
+const uploadApp = express();
+const server = new tus.Server();
+server.datastore = new tus.FileStore({
+  path: path.resolve(process.cwd(), 'uploader', 'data')
+});
+server.on(EVENTS.EVENT_UPLOAD_COMPLETE, (event) => {
+  console.log(`Upload complete for file ${event.file.id}`);
+});
+server.on(EVENTS.EVENT_ENDPOINT_CREATED, (event) => {
+  console.log(`Upload complete for file ${event.url}`);
+});
+uploadApp.all('*', server.handle.bind(server));
+app.use('/uploads', uploadApp);
 
 
 // IO Save in GLOBAL.
