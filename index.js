@@ -57,7 +57,7 @@ app.use(saleServer);
 const uploadApp = express();
 const server = new tus.Server();
 server.datastore = new tus.FileStore({
-  path: path.resolve(process.cwd(), 'uploader', 'data')
+  path: '/files'
 });
 server.on(EVENTS.EVENT_UPLOAD_COMPLETE, (event) => {
   console.log(`Upload complete for file ${event.file.id}`);
