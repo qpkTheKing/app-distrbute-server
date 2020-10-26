@@ -212,13 +212,13 @@ router.get('/user/app/pkg', auth, async (req, resp) => {
 router.post('/user/app/mobileConfig', auth, async (req, resp) => {
   const { email } = req.user;
   const { pkgHashId, pkgFileName, pkgFileId, description, forDownload, version, appId } = req.body;
-  const downloadServer = 'http://198.13.52.160:4000';
+  const downloadServer = 'https://appdistribute.info:4000';
   let appFile = null;
 
   try {
     if (pkgHashId) {
       const finalPkgPath = path.resolve(process.cwd(), 'uploader', 'mobileConfigs', `${pkgHashId}-${pkgFileName}`);
-      const uploadedFilePath = path.resolve(process.cwd(), 'uploader', 'data', pkgHashId);
+      const uploadedFilePath = path.resolve(process.cwd(), 'files', pkgHashId);
       const fileState = fs.statSync(uploadedFilePath);
       fs.copyFileSync(uploadedFilePath, finalPkgPath);
       if (pkgFileId) {
