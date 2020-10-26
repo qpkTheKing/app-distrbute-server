@@ -12,9 +12,16 @@ const EVENTS = require('tus-node-server').EVENTS;
 const serveStatic = require('serve-static');
 const contentDisposition = require('content-disposition');
 // const socketAPI = require('./socket/transfer');
+const fs = require('fs');
+
+const options = {
+  key: fs.readFileSync('appdistribute.info_key.key'),
+  cert: fs.readFileSync('appdistribute.info_chain.crt')
+};
 
 const app = express();
-const http = require('http').createServer(app);
+// const http = require('http').createServer(app);
+const https = require('https').createServer(app);
 
 // static for mobileconfig
 const mobileConfigs = path.resolve(process.cwd(), 'uploader', 'mobileConfigs');
@@ -99,6 +106,6 @@ app.use(userRouter);
 // start to socket listener
 // socketAPI.transferServerSide(socketIO);
 
-http.listen(PORT, () => {
+https.createServer(options, () => {
   console.log(`App is running on ${PORT}`);
-});
+}).listen(PORT);
