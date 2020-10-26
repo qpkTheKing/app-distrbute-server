@@ -21,7 +21,7 @@ const options = {
 
 const app = express();
 // const http = require('http').createServer(app);
-const https = require('https').createServer(app);
+const https = require('https').createServer(options, app);
 
 // static for mobileconfig
 const mobileConfigs = path.resolve(process.cwd(), 'uploader', 'mobileConfigs');
@@ -106,6 +106,6 @@ app.use(userRouter);
 // start to socket listener
 // socketAPI.transferServerSide(socketIO);
 
-https.createServer(options, () => {
+https.listen(PORT, () => {
   console.log(`App is running on ${PORT}`);
-}).listen(PORT);
+});
