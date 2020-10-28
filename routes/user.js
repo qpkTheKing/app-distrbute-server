@@ -611,28 +611,28 @@ router.post('/user/images/sale', async (req, resp, next) => {
 
   try {
     let textImageWidth = 0;
-    const attributes = {fill: 'white', stroke: 'gray'};
+    const attributes = {fill: 'black', stroke: 'gray'};
     const tts = text2svg.loadSync(path.join(process.cwd(), 'config', 'msyh.ttf'));
-    const bgImage = imagesEngine(path.join(process.cwd(), 'config', 'Red-Background.jpg'));
+    const bgImage = imagesEngine(path.join(process.cwd(), 'config', '25100.jpg'));
     const width = bgImage.width();
     // render text.
     for (let i = 0; i < texts.length; i++) {
       const tSvg = tts.getSVG(texts[i], {
         x: 0,
         y: 0,
-        fontSize: 96,
+        fontSize: 28,
         anchor: 'top',
         attributes
       });
       const textSvg = await svg2png(tSvg);
       const textImage = imagesEngine(textSvg);
       textImageWidth = textImage.width();
-      bgImage.draw(textImage, width / 20 , 200 * ( i + 1 ));
+      bgImage.draw(textImage, width / 20 , 40 * ( i + 1 ));
     }
     const selectedTemplateFont = tts.getSVG('选定得模板:  ', {
       x: 0,
       y: 0,
-      fontSize: 80,
+      fontSize: 28,
       anchor: 'top',
       attributes
     });
@@ -643,10 +643,10 @@ router.post('/user/images/sale', async (req, resp, next) => {
     const templateSavePath = path.join(__dirname, `../tmp/template.${uuid}.jpg`);
     const mobileImageBuffer = await got(images.mobile).buffer();
     const pcImageBuffer = await got(images.pc).buffer();
-    const mobileImage = imagesEngine(mobileImageBuffer).size(1080, 1920);
-    bgImage.draw(mobileImage, width / 20, 1000);
-    const pcImage = imagesEngine(pcImageBuffer).size(1920, 1080);
-    bgImage.draw(pcImage, width / 20 + mobileImage.width() + 100, 1000);
+    const mobileImage = imagesEngine(mobileImageBuffer).size(427, 700);
+    bgImage.draw(mobileImage, width / 20, 270);
+    const pcImage = imagesEngine(pcImageBuffer).size(1099, 527);
+    bgImage.draw(pcImage, width / 20 + mobileImage.width() + 100, 270);
     // save
     await bgImage.save(templateSavePath);
     // over
