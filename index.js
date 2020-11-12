@@ -15,8 +15,8 @@ const contentDisposition = require('content-disposition');
 const fs = require('fs');
 
 const options = {
-  key: fs.readFileSync('appdistribute.info_key.key'),
-  cert: fs.readFileSync('appdistribute.info_chain.crt')
+  key: fs.readFileSync('www.appdistribute.cc_key.key'),
+  cert: fs.readFileSync('www.appdistribute.cc_chain.crt')
 };
 
 const app = express();
