@@ -645,7 +645,7 @@ router.post('/user/images/sale', async (req, resp, next) => {
     const pcImageBuffer = await got(images.pc).buffer();
     const mobileImage = imagesEngine(mobileImageBuffer).size(427, 700);
     bgImage.draw(mobileImage, width / 20, 270);
-    const pcImage = imagesEngine(pcImageBuffer).size(1099, 527);
+    const pcImage = imagesEngine(pcImageBuffer).size(1099, 700);
     bgImage.draw(pcImage, width / 20 + mobileImage.width() + 100, 270);
     // save
     await bgImage.save(templateSavePath);
